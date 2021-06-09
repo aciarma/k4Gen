@@ -51,7 +51,7 @@ private:
   std::ifstream m_input;
   int NHEP;
   int m_format;
-
+  double xing, cut_z;
   /// Handle for the genparticles to be written
   DataHandle<edm4hep::MCParticleCollection> m_genphandle {"GenParticles", Gaudi::DataHandle::Writer, this};
 
