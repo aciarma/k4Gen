@@ -38,7 +38,7 @@ function(set_test_env _testname)
     LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}:$<TARGET_FILE_DIR:k4Gen>:$<TARGET_FILE_DIR:ROOT::Core>:$<TARGET_FILE_DIR:k4FWCore::k4FWCore>:$<TARGET_FILE_DIR:EDM4HEP::edm4hep>:$<TARGET_FILE_DIR:podio::podio>:$ENV{LD_LIBRARY_PATH}
     PYTHONPATH=${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}/${GAUDI_GENCONF_DIR}:$<TARGET_FILE_DIR:k4FWCore::k4FWCore>/../python:$ENV{PYTHONPATH}
     PATH=$<TARGET_FILE_DIR:k4FWCore::k4FWCore>/../bin:$ENV{PATH}
-    K4GEN=${CMAKE_CURRENT_LIST_DIR}/
+    K4GEN=${CMAKE_CURRENT_LIST_DIR}/data
     )
 endfunction()
 
@@ -61,3 +61,8 @@ set_test_env(Pythia8Default)
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/options
   DESTINATION ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME}/examples
   PATTERN "__init__.py" EXCLUDE)
+
+file(GLOB k4gen_config_files data/*)
+install(FILES ${k4gen_config_files}
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME}/
+  )
