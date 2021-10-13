@@ -103,15 +103,17 @@ StatusCode MDIReader::execute()
       VHEP3 *=1e-9; //convert from nm to m
       
       //---boost section
-      //PHEP4 = abs(PHEP4);
-      temp_x  = cut_z*1e-6*tan(xing) + VHEP1*sqrt(1-pow(tan(xing),2));
-      temp_px = PHEP4*tan(xing) + PHEP1*PHEP4*sqrt(1-pow(tan(xing),2));
-      temp_e  = abs( PHEP4*sqrt(1-pow(tan(xing),2)) + PHEP1*PHEP4*tan(xing) );
+      PHEP4 = abs(PHEP4);
+      temp_x  = cut_z*1e-6*tan(xing) + VHEP1*sqrt(1+pow(tan(xing),2));
+      temp_px = PHEP4*tan(xing) + PHEP1*PHEP4*sqrt(1+pow(tan(xing),2));
+      temp_e  = abs( PHEP4*sqrt(1+pow(tan(xing),2)) + PHEP1*PHEP4*tan(xing) );
 
       VHEP1 = temp_x;
-      //PHEP1 = temp_px;
+      PHEP1 = temp_px;
+      PHEP2 = PHEP2*PHEP4;
+      PHEP3 = PHEP3*PHEP4;
       PHEP4 = temp_e;
-      PHEP1 = temp_px/temp_e;
+      
       //---end boost section
       
       VHEP1 *=1e3; //convert from m to mm
@@ -120,16 +122,18 @@ StatusCode MDIReader::execute()
 
       //boost to lab frame
       
-      
+      VHEP1=0;
+      VHEP2=0;
+      VHEP3=0;
       edm4hep::MCParticle particle = particles->create();
 
       particle.setPDG(IDHEP);
       particle.setCharge(CHARGE);
       particle.setGeneratorStatus(ISTHEP); 
       particle.setMomentum({
-	  (float) (PHEP1*PHEP4),
-	  (float) (PHEP2*PHEP4),
-	  (float) (PHEP3*PHEP4),
+	  (float) (PHEP1),
+	  (float) (PHEP2),
+	  (float) (PHEP3),
 	});
       particle.setMass(PHEP5);
       particle.setVertex({
